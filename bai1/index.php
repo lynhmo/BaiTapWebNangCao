@@ -17,40 +17,53 @@
         input {
             width: auto;
         }
-        #calc{
-            width: 400px;
-        }
-        #calc.div{
-            width: 100%;
+
+        button {
+            margin-top: 20px;
         }
     </style>
     <h2>Xử lý phương trình bậc nhất</h2>
-    <form action="">
+    <?php
+    $result = '';
+    if (isset($_POST['calculate'])) {
+        // Bước 1: Lấy thông tin
+        $a = isset($_POST['a']) ? (float)trim($_POST['a']) : '';
+        $b = isset($_POST['b']) ? (float)trim($_POST['b']) : '';
+
+        // Bước 2: Validate thông tin và tính toán
+        if ($a == '') {
+            $result = 'Bạn chua nhập số a';
+        } else if ($b == '') {
+            $result = 'Bạn chưa nhập số b';
+        } else if ($a == 0) {
+            $result = 'Số a phải nhập khác 0';
+        } else {
+            $result = - ($b) / $a;
+        }
+    }
+    ?>
+    <form action="" method="POST">
         <!-- number a -->
         <div id="calc">
             <div>
                 <label for="a">Số A: </label>
+                <br>
                 <input type="text" id="a" name="a">
                 <br>
             </div>
             <!-- number b -->
             <div>
                 <label for="b">Số B: </label>
+                <br>
                 <input type="text" id="b" name="b">
                 <br>
             </div>
-            <!-- ket qua -->
-            <div>
-                <label for="ketqua">Kết quả</label>
-                <input type="text" id="ketqua" name="ketqua">
-            </div>
             <!-- nut bam -->
-            <button type="submit">Ket Qua</button>
+            <input type="submit" name="calculate">
+            <br>
+            <span>Ket Qua: </span> <?php echo $result ?>
         </div>
     </form>
-    <?php
-
-    ?>
 </body>
 
 </html>
