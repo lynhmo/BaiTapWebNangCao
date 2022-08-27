@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("./functions.php");
+// require_once("dbConnection.php");
 
 $username = getValue("username", "POST", "str", "");
 $password = getValue("password", "POST", "str", "");
@@ -16,26 +17,27 @@ echo ('<br>');
 var_dump($action);
 
 $errorMsg = "";
-if ($action == "login") {
-    if ($username == "") {
-        $errorMsg .= "&bull; Vui lòng nhập User Name.<br />";
-    }
-    if ($password == "") {
-        $errorMsg .= "&bull; Vui lòng nhập Password.<br />";
-    }
+// if ($action == "login") {
+//     if ($username == "") {
+//         $errorMsg .= "&bull; Vui lòng nhập User Name.<br />";
+//     }
+//     if ($password == "") {
+//         $errorMsg .= "&bull; Vui lòng nhập Password.<br />";
+//     }
 
-    // Nếu có đủ dữ liệu POST thì xác thực
-    if ($errorMsg == "") {
-        if ($username == "admin" && $password == "admin") {
-            // Success
-            // echo "Success";
-            $_SESSION["logged"] = 1;
-            header("Location: dashboard.php");
-        } else {
-            $errorMsg .= "&bull; Thông tin đăng nhập không đúng. Vui lòng thử lại.<br />";
-        }
-    }
-}
+//     // Nếu có đủ dữ liệu POST thì xác thực
+//     if ($errorMsg == "") {
+//         if ($username == "admin" && $password == "admin") {
+//             // Success
+//             // echo "Success";
+//             $_SESSION["logged"] = 1;
+//             header("Location: dashboard.php");
+//         } else {
+//             $errorMsg .= "&bull; Thông tin đăng nhập không đúng. Vui lòng thử lại.<br />";
+//         }
+
+//     }
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,10 +56,69 @@ if ($action == "login") {
 </head>
 
 <body>
+    <?php
+    // define variables and set to empty values
+
+    $Message = $ErrorUname = $ErrorPass = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        $username = check_input($_POST["username"]);
+
+        if (!preg_match("/^[a-zA-Z0-9_]*$/", $username)) {
+            $ErrorUname = "Space and special characters not allowed but you can use underscore(_).";
+        } else {
+            $fusername = $username;
+        }
+
+        $fpassword = check_input($_POST["password"]);
+
+        if ($ErrorUname != "") {
+            $Message = "Login failed! Errors found";
+        } else {
+            include("dbConnection.php");
+            $dbConnection = new dbConnection();
+            $conn = $dbConnection->getConnection();
+            $query = mysqli_query($conn, "select * from `users` where name='$fusername' && password='$fpassword'");
+            $num_rows = mysqli_num_rows($query);
+            $row = mysqli_fetch_array($query);
+
+            //login check v1
+            // if ($num_rows > 0) {
+            //     $Message = "Login Successful!";
+            // } else {
+            //     $Message = "Login Failed! User not found";
+            // }
+            //login check v2
+        }
+    }
+
+    function check_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+    ?>
+
+
+
+
     <div class="login-form">
         <form action="" method="POST">
             <div class="avatar"><i class="material-icons">&#xE7FF;</i></div>
             <h4 class="modal-title">Login to Your Account</h4>
+            <?php
+            if ($action == "login") {
+                if ($num_rows > 0) {
+                    $_SESSION["logged"] = 1;
+                    header("Location: dashboard.php");
+                } else {
+                    echo ('<span style="color: red;">*Login Fail</span>');
+                }
+            }
+            ?>
             <div class="form-group">
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" required="required" value="<?= $username ?>">
             </div>
@@ -75,4 +136,4 @@ if ($action == "login") {
     </div>
 </body>
 
-</html>
+</html> 
