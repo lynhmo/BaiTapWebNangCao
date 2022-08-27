@@ -2,9 +2,9 @@
 class dbConnection
 {
     private $servername = "localhost";
-    private $username = "diepcd";
-    private $password = "diepcd";
-    private $dbname = "dblogin";
+    private $username = "root";
+    private $password = "rootadmin";
+    private $dbname = "userloginpage";
 
     public function __construct()
     {

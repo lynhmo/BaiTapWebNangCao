@@ -22,7 +22,7 @@ if ($action == "login") {
 
     // Nếu có đủ dữ liệu POST thì xác thực
     if ($errorMsg == "") {
-        if ($username == "admin" && $password == "admin@2021") {
+        if ($username == "admin" && $password == "admin") {
             // Success
             // echo "Success";
             $_SESSION["logged"] = 1;
