@@ -19,7 +19,7 @@ if ($action != "") {
         $conn = $dbConnection->getConnection();
 
         $sql = 'INSERT INTO users (id, name, password) 
-                VALUES (' . $inputID . ', "' . $inputEmail . '", "' . $inputPassword . '")';
+                VALUES (' . $inputID . ', "' . $inputEmail . '", "' . md5($inputPassword) . '")';
 
         if ($conn->query($sql) === true) {
             $message = "New record created successfully";

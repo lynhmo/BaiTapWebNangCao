@@ -2,6 +2,41 @@
 require_once("config.php");
 require_once("functions.php");
 require_once("dbConnection.php");
+
+
+
+$message = "";
+$error = "";
+
+$action = getValue("action", "POST", "str", "");
+function AddDB($action)
+{
+	if ($action == "submit") {
+		// Lay POST Value
+		$inputID = getValue("inputID", "POST", "int", 0);
+		$inputName = getValue("inputName", "POST", "str", "");
+		$inputPassword = getValue("inputPassword", "POST", "str", "");
+
+		if ($inputID > 0 && $inputName != "" && $inputPassword != "") {
+			// Insert SQL
+			$dbConnection = new dbConnection();
+			$conn = $dbConnection->getConnection();
+
+			$sql = 'INSERT INTO users (id, name, password) 
+						VALUES (' . $inputID . ', "' . $inputName . '", "' . md5($inputPassword) . '")';
+
+			if ($conn->query($sql) === true) {
+				$message = "New record created successfully";
+			} else {
+				$error = "Error: " . $sql . "<br>" . $conn->error;
+			}
+
+			$conn->close();
+		} else {
+			$error = "Thông tin nhập không đủ !";
+		}
+	}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -404,7 +439,10 @@ require_once("dbConnection.php");
 	<div id="addEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form method="POST">
+					<?php
+					AddDB($action);
+					?>
 					<div class="modal-header">
 						<h4 class="modal-title">Add User</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -412,18 +450,20 @@ require_once("dbConnection.php");
 					<div class="modal-body">
 						<div class="form-group">
 							<label>ID</label>
-							<input type="text" class="form-control" required>
+							<input type="text" class="form-control" required name="id">
 						</div>
 						<div class="form-group">
 							<label>Name/Email</label>
-							<input type="email" class="form-control" required>
+							<input type="text" class="form-control" required name="username">
 						</div>
 						<div class="form-group">
 							<label>Password</label>
-							<input type="email" class="form-control" required>
+							<input type="text" class="form-control" required name="password">
 						</div>
 					</div>
 					<div class="modal-footer">
+						<!-- bien an -->
+						<input type="hidden" name="action" value="submit" />
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 						<input type="submit" class="btn btn-success" value="Add">
 					</div>
@@ -443,15 +483,15 @@ require_once("dbConnection.php");
 					<div class="modal-body">
 						<div class="form-group">
 							<label>ID</label>
-							<input type="text" class="form-control" required>
+							<input type="text" class="form-control" required name="inputID">
 						</div>
 						<div class="form-group">
 							<label>Name/Email</label>
-							<input type="email" class="form-control" required>
+							<input type="text" class="form-control" required name="inputName">
 						</div>
 						<div class="form-group">
 							<label>Password</label>
-							<input type="text" class="form-control" required>
+							<input type="text" class="form-control" required name="inputPassword">
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -459,6 +499,17 @@ require_once("dbConnection.php");
 						<input type="submit" class="btn btn-info" value="Save">
 					</div>
 				</form>
+				<?php
+				var_dump($_POST);
+				echo ('<br>');
+				var_dump($inputID);
+				echo ('<br>');
+				var_dump($inputName);
+				echo ('<br>');
+				var_dump($inputPassword);
+				echo ('<br>');
+				var_dump($action);
+				?>
 			</div>
 		</div>
 	</div>

@@ -17,27 +17,6 @@ echo ('<br>');
 var_dump($action);
 
 $errorMsg = "";
-// if ($action == "login") {
-//     if ($username == "") {
-//         $errorMsg .= "&bull; Vui lòng nhập User Name.<br />";
-//     }
-//     if ($password == "") {
-//         $errorMsg .= "&bull; Vui lòng nhập Password.<br />";
-//     }
-
-//     // Nếu có đủ dữ liệu POST thì xác thực
-//     if ($errorMsg == "") {
-//         if ($username == "admin" && $password == "admin") {
-//             // Success
-//             // echo "Success";
-//             $_SESSION["logged"] = 1;
-//             header("Location: dashboard.php");
-//         } else {
-//             $errorMsg .= "&bull; Thông tin đăng nhập không đúng. Vui lòng thử lại.<br />";
-//         }
-
-//     }
-// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +25,7 @@ $errorMsg = "";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./assets/index.css">
     <title>Bai 2 - Login Page</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
@@ -56,8 +35,16 @@ $errorMsg = "";
 </head>
 
 <body>
+
     <?php
     // define variables and set to empty values
+    function check_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
 
     $Message = $ErrorUname = $ErrorPass = "";
 
@@ -82,29 +69,9 @@ $errorMsg = "";
             $query = mysqli_query($conn, "select * from `users` where name='$fusername' && password='$fpassword'");
             $num_rows = mysqli_num_rows($query);
             $row = mysqli_fetch_array($query);
-
-            //login check v1
-            // if ($num_rows > 0) {
-            //     $Message = "Login Successful!";
-            // } else {
-            //     $Message = "Login Failed! User not found";
-            // }
-            //login check v2
         }
     }
-
-    function check_input($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
     ?>
-
-
-
-
     <div class="login-form">
         <form action="" method="POST">
             <div class="avatar"><i class="material-icons">&#xE7FF;</i></div>
@@ -136,4 +103,4 @@ $errorMsg = "";
     </div>
 </body>
 
-</html> 
+</html>
