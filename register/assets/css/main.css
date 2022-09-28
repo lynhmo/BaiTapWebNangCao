@@ -1,0 +1,19 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    height: auto;
+}
+.head{
+    height: 200px;
+}
+.container{
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    color: orange;
+    /* color: aliceblue; */
+}
