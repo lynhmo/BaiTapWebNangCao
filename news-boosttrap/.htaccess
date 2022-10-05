@@ -1,2 +1,0 @@
-RewriteEngine on
-RewriteRule ^post/(.*).html$ ./single.php?url=$1
