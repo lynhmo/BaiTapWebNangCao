@@ -15,7 +15,7 @@ if (mysqli_num_rows($query) == 0) {
 
 ?>
 
-<div class="row">
+<div class="row mx-auto">
     <div class="col col-sm-9">
         <div class="main-content">
             <h1><?php echo $row['title']; ?></h1>
